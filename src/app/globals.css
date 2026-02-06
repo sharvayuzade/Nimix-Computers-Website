@@ -1,0 +1,230 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== Base Styles ===== */
+:root {
+  --foreground: #f9fafb;
+  --background: #030712;
+  --surface: #111827;
+  --surface-light: #1f2937;
+  --primary: #3b82f6;
+  --primary-light: #60a5fa;
+  --accent-cyan: #06b6d4;
+  --border: #1f2937;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== Custom Scrollbar ===== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #374151;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4b5563;
+}
+
+/* ===== Selection ===== */
+::selection {
+  background: rgba(59, 130, 246, 0.3);
+  color: #fff;
+}
+
+/* ===== Utility Classes ===== */
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-400 via-accent-cyan to-primary-500;
+  }
+
+  .text-gradient-purple {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-accent-purple;
+  }
+
+  .bg-glass {
+    @apply bg-surface/80 backdrop-blur-xl border border-white/5;
+  }
+
+  .bg-glass-light {
+    @apply bg-surface-light/60 backdrop-blur-lg border border-white/10;
+  }
+
+  .glow-border {
+    @apply relative overflow-hidden;
+  }
+
+  .glow-border::before {
+    content: '';
+    @apply absolute inset-0 rounded-[inherit];
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.4), rgba(6, 182, 212, 0.2), transparent);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .hover-glow {
+    @apply transition-all duration-500;
+  }
+
+  .hover-glow:hover {
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.15), 0 0 60px rgba(59, 130, 246, 0.05);
+  }
+
+  .section-padding {
+    @apply py-24 md:py-32 px-4 sm:px-6 lg:px-8;
+  }
+
+  .container-custom {
+    @apply max-w-7xl mx-auto;
+  }
+
+  .heading-xl {
+    @apply text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1];
+  }
+
+  .heading-lg {
+    @apply text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight;
+  }
+
+  .heading-md {
+    @apply text-2xl sm:text-3xl font-bold tracking-tight;
+  }
+
+  .body-lg {
+    @apply text-lg md:text-xl text-gray-400 leading-relaxed;
+  }
+
+  .body-md {
+    @apply text-base md:text-lg text-gray-400 leading-relaxed;
+  }
+}
+
+/* ===== Grid Pattern Background ===== */
+.bg-grid {
+  background-image: 
+    linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* ===== Radial Gradient Backgrounds ===== */
+.bg-radial-top {
+  background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(59, 130, 246, 0.12), transparent);
+}
+
+.bg-radial-center {
+  background: radial-gradient(ellipse 60% 40% at 50% 50%, rgba(59, 130, 246, 0.08), transparent);
+}
+
+.bg-radial-bottom {
+  background: radial-gradient(ellipse 80% 50% at 50% 120%, rgba(59, 130, 246, 0.12), transparent);
+}
+
+/* ===== Noise Texture ===== */
+.bg-noise::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  opacity: 0.015;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ===== Hero Slide Transitions ===== */
+.slide-enter {
+  opacity: 0;
+  transform: scale(1.05);
+}
+
+.slide-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 800ms ease-out, transform 800ms ease-out;
+}
+
+.slide-exit {
+  opacity: 1;
+}
+
+.slide-exit-active {
+  opacity: 0;
+  transition: opacity 600ms ease-in;
+}
+
+/* ===== Animated Gradient Line ===== */
+.gradient-line {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(59, 130, 246, 0.5),
+    rgba(6, 182, 212, 0.5),
+    transparent
+  );
+}
+
+/* ===== Shimmer Effect ===== */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2.5s linear infinite;
+}
+
+/* ===== Card 3D Hover ===== */
+.card-3d {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.card-3d:hover {
+  transform: translateY(-4px);
+}
+
+/* ===== Loading Spinner ===== */
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(59, 130, 246, 0.1);
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
