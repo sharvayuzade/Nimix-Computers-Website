@@ -1,1 +1,5 @@
+.next
 node_modules
+.env
+.vercel
+.DS_Store
