@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Send, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
-import { db } from '@/lib/firebase'
+import { getDb } from '@/lib/firebase'
 
 interface FormData {
   name: string
@@ -37,6 +37,11 @@ export default function ContactForm() {
     setStatus('loading')
 
     try {
+      const db = getDb()
+      if (!db) {
+        throw new Error('Firebase not initialized')
+      }
+      
       await addDoc(collection(db, 'inquiries'), {
         ...formData,
         createdAt: serverTimestamp(),

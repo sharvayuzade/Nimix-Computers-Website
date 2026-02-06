@@ -1,8 +1,8 @@
-import { initializeApp, getApps } from 'firebase/app'
-import { getFirestore } from 'firebase/firestore'
-import { getAuth } from 'firebase/auth'
-import { getStorage } from 'firebase/storage'
-import { getAnalytics, isSupported } from 'firebase/analytics'
+import { initializeApp, getApps, FirebaseApp } from 'firebase/app'
+import { getFirestore, Firestore } from 'firebase/firestore'
+import { getAuth, Auth } from 'firebase/auth'
+import { getStorage, FirebaseStorage } from 'firebase/storage'
+import { getAnalytics, isSupported, Analytics } from 'firebase/analytics'
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -14,23 +14,71 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 }
 
-// Initialize Firebase
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0]
+// Initialize Firebase app lazily (only in browser)
+let app: FirebaseApp | null = null
+let firestoreInstance: Firestore | null = null
+let authInstance: Auth | null = null
+let storageInstance: FirebaseStorage | null = null
 
-// Initialize services
-export const db = getFirestore(app)
-export const auth = getAuth(app)
-export const storage = getStorage(app)
+const getApp = () => {
+  if (typeof window === 'undefined') return null
+  if (!app) {
+    app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0]
+  }
+  return app
+}
+
+// Lazy getters for Firebase services
+export const getDb = () => {
+  if (typeof window === 'undefined') return null
+  if (!firestoreInstance) {
+    const firebaseApp = getApp()
+    if (firebaseApp) {
+      firestoreInstance = getFirestore(firebaseApp)
+    }
+  }
+  return firestoreInstance
+}
+
+export const getAuthInstance = () => {
+  if (typeof window === 'undefined') return null
+  if (!authInstance) {
+    const firebaseApp = getApp()
+    if (firebaseApp) {
+      authInstance = getAuth(firebaseApp)
+    }
+  }
+  return authInstance
+}
+
+export const getStorageInstance = () => {
+  if (typeof window === 'undefined') return null
+  if (!storageInstance) {
+    const firebaseApp = getApp()
+    if (firebaseApp) {
+      storageInstance = getStorage(firebaseApp)
+    }
+  }
+  return storageInstance
+}
 
 // Initialize Analytics (only in browser)
-export const initAnalytics = async () => {
+export const initAnalytics = async (): Promise<Analytics | null> => {
   if (typeof window !== 'undefined') {
-    const supported = await isSupported()
-    if (supported) {
-      return getAnalytics(app)
+    const firebaseApp = getApp()
+    if (firebaseApp) {
+      const supported = await isSupported()
+      if (supported) {
+        return getAnalytics(firebaseApp)
+      }
     }
   }
   return null
 }
 
-export default app
+// Legacy exports for backwards compatibility (will return null on server)
+export const db = typeof window !== 'undefined' ? getDb() : null
+export const auth = typeof window !== 'undefined' ? getAuthInstance() : null
+export const storage = typeof window !== 'undefined' ? getStorageInstance() : null
+
+export default typeof window !== 'undefined' ? getApp() : null
