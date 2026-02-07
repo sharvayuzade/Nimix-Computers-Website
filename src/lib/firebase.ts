@@ -75,10 +75,3 @@ export const initAnalytics = async (): Promise<Analytics | null> => {
   }
   return null
 }
-
-// Legacy exports for backwards compatibility (will return null on server)
-export const db = typeof window !== 'undefined' ? getDb() : null
-export const auth = typeof window !== 'undefined' ? getAuthInstance() : null
-export const storage = typeof window !== 'undefined' ? getStorageInstance() : null
-
-export default typeof window !== 'undefined' ? getApp() : null
