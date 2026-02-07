@@ -3,8 +3,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Send, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
-import { getDb } from '@/lib/firebase'
+import { supabase } from '@/lib/supabase'
 
 interface FormData {
   name: string
@@ -37,16 +36,21 @@ export default function ContactForm() {
     setStatus('loading')
 
     try {
-      const db = getDb()
-      if (!db) {
-        throw new Error('Firebase not initialized')
-      }
-      
-      await addDoc(collection(db, 'inquiries'), {
-        ...formData,
-        createdAt: serverTimestamp(),
-        status: 'new',
-      })
+      const { error } = await supabase
+        .from('inquiries')
+        .insert([
+          {
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            subject: formData.subject,
+            message: formData.message,
+            status: 'new',
+          }
+        ])
+
+      if (error) throw error
+
       setStatus('success')
       setFormData({ name: '', email: '', phone: '', subject: '', message: '' })
       setTimeout(() => setStatus('idle'), 5000)
