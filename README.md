@@ -210,7 +210,7 @@ This project is **private** and proprietary. All rights reserved.
 
 ## 📧 Contact
 
-**Sharvay Uzade** - [@sharvayuzade](https://github.com/sharvayuzade)
+**Sharvayu Zade** - [@sharvayuzade](https://github.com/sharvayuzade)
 
 **Project Link:** [https://github.com/sharvayuzade/Nimix-Computers-Website](https://github.com/sharvayuzade/Nimix-Computers-Website)
 
