@@ -1,0 +1,7 @@
+# robots.txt for Nimix Computers Website
+User-agent: *
+Allow: /
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://nimixcomputers.vercel.app/sitemap.xml

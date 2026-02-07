@@ -58,7 +58,10 @@ export default function ContactForm() {
   }
 
   const inputClasses =
-    'w-full px-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-gray-500 focus:outline-none focus:border-primary-500/50 focus:bg-white/[0.07] transition-all duration-300 text-sm'
+    'w-full px-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-gray-400 focus:outline-none focus:border-primary-500/50 focus:bg-white/[0.07] transition-all duration-300 text-sm'
+
+  const selectClasses =
+    'w-full px-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-primary-500/50 focus:bg-white/[0.07] transition-all duration-300 text-sm appearance-none cursor-pointer [&>option]:bg-gray-900 [&>option]:text-white [&>option]:py-2'
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
@@ -121,15 +124,18 @@ export default function ContactForm() {
             value={formData.subject}
             onChange={handleChange}
             required
-            className={inputClasses}
+            className={selectClasses}
+            style={{
+              colorScheme: 'dark',
+            }}
           >
-            <option value="">Select a subject</option>
-            <option value="Product Inquiry">Product Inquiry</option>
-            <option value="Repair Service">Repair Service</option>
-            <option value="CCTV Installation">CCTV Installation</option>
-            <option value="Bulk Order">Bulk Order</option>
-            <option value="AMC">Annual Maintenance Contract</option>
-            <option value="Other">Other</option>
+            <option value="" className="bg-gray-900 text-gray-400">Select a subject</option>
+            <option value="Product Inquiry" className="bg-gray-900 text-white">Product Inquiry</option>
+            <option value="Repair Service" className="bg-gray-900 text-white">Repair Service</option>
+            <option value="CCTV Installation" className="bg-gray-900 text-white">CCTV Installation</option>
+            <option value="Bulk Order" className="bg-gray-900 text-white">Bulk Order</option>
+            <option value="AMC" className="bg-gray-900 text-white">Annual Maintenance Contract</option>
+            <option value="Other" className="bg-gray-900 text-white">Other</option>
           </select>
         </div>
       </div>
