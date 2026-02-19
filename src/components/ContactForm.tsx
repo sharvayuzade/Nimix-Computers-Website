@@ -36,15 +36,62 @@ export default function ContactForm() {
     setStatus('loading')
 
     try {
+      // Client-side validation before submission
+      const validationErrors = []
+
+      // Name validation
+      if (!formData.name.trim()) {
+        validationErrors.push('Name is required')
+      } else if (formData.name.trim().length < 2) {
+        validationErrors.push('Name must be at least 2 characters long')
+      }
+
+      // Email validation
+      const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$/
+      if (!formData.email.trim()) {
+        validationErrors.push('Email is required')
+      } else if (!emailRegex.test(formData.email)) {
+        validationErrors.push('Invalid email format')
+      }
+
+      // Phone validation
+      const phoneDigitsOnly = formData.phone.replace(/\D/g, '')
+      if (!formData.phone.trim()) {
+        validationErrors.push('Phone number is required')
+      } else if (phoneDigitsOnly.length < 10) {
+        validationErrors.push('Phone number must have at least 10 digits')
+      }
+
+      // Subject validation
+      if (!formData.subject.trim()) {
+        validationErrors.push('Subject is required')
+      }
+
+      // Message validation
+      if (!formData.message.trim()) {
+        validationErrors.push('Message is required')
+      } else if (formData.message.trim().length < 10) {
+        validationErrors.push('Message must be at least 10 characters long')
+      }
+
+      // If validation fails, show errors
+      if (validationErrors.length > 0) {
+        console.error('Validation errors:', validationErrors)
+        setStatus('error')
+        setTimeout(() => setStatus('idle'), 5000)
+        return
+      }
+
+      // Submit to Supabase
       const { error } = await supabase
         .from('inquiries')
         .insert([
           {
-            name: formData.name,
-            email: formData.email,
-            phone: formData.phone,
-            subject: formData.subject,
-            message: formData.message,
+            name: formData.name.trim(),
+            email: formData.email.trim().toLowerCase(),
+            phone: formData.phone.trim(),
+            subject: formData.subject.trim(),
+            message: formData.message.trim(),
             status: 'new',
           }
         ])
